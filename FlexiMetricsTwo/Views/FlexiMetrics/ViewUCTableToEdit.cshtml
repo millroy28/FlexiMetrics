@@ -1,0 +1,94 @@
+﻿@{
+    ViewData["Title"] = "ViewUCTableToEdit";
+}
+
+@model List<ChangeRequest>
+@{//ChangeTypeId = 1 Is Table Name, ChangeTypeId = 4 is Column
+  ChangeRequest Table = Model.Where(x => x.ChangeTypeId == 1).First();
+  int TableID = Table.ChangeRequestId;
+}
+<h4>Edit Under Construction Table</h4>
+
+   
+@if (@Model.Any())
+{
+    <p>You are currently constructing the following table:</p>
+    <p>@Table.NewValue</p>
+    <p><a href="/FlexiMetrics/EditUCTableName?Id=@Table.ChangeRequestId">Change Table Name</a></p>
+
+    <table class="table-bordered">
+        <tr>
+            @foreach (var column in Model)
+            {
+                @if (column.ChangeTypeId == 4)
+                {
+                    <td>
+                        <p>@column.NewValue</p>
+                        <p>@column.ValueType</p>
+                    </td>
+                }
+            }
+        </tr>
+        <tr>
+            @foreach (var column in Model)
+            {
+                @if (column.ChangeTypeId == 4)
+                {
+                    <td>
+                        <a href="/FlexiMetrics/EditUCTableColumn?id=@column.ChangeRequestId">Edit column</a>
+                    </td>
+                }
+            }
+        </tr>
+        <tr>
+            @foreach (var column in Model)
+            {
+                @if (column.ChangeTypeId == 4)
+                {
+                    <td>
+                        <a href="/FlexiMetrics/ConfirmDeleteUCTableColumn?id=@column.ChangeRequestId">Delete Column</a>
+                    </td>
+                }
+            }
+        </tr>
+    </table>
+
+    <p></p>
+    <p></p>
+    <p>Add Column to Table:</p>
+
+    <form action="/FlexiMetrics/AddUCTableColumn" method="post" class="col-form-label">
+        <input type="text" name="NewValue" placeholder="Column Name" />
+        <input type="radio" name="ValueType" value="Integer" />Integer
+        <input type="radio" name="ValueType" value="Money" />Money
+        <input type="radio" name="ValueType" value="Decimal Value Numbers" />Decimal Value Numbers
+        <input type="radio" name="ValueType" value="Dates and Times" />Dates and Times
+        <input type="radio" name="ValueType" value="Binary Value" />Binary Value
+        <input type="radio" name="ValueType" value="Small string" />Small string (10 chars or less)
+        <input type="radio" name="ValueType" value="Medium string" />Medium string (50 chars or less)
+        <input type="radio" name="ValueType" value="Large string" />Large string (500 chars or less)
+        <input type="radio" name="ValueType" value="Maximum length" />Maximum length string
+        <input type="hidden" name="Author" value="" />
+        <input type="hidden" name="SchemiID" value="" />
+        <input type="hidden" name="ChangeTypeID" value="4" />
+        <input type="hidden" name="ParentId" value="@TableID"/>
+<input type="submit" value="Submit New Column" />
+
+</form>
+
+
+<p></p>
+
+<p></p>
+
+<p></p>
+
+<p>Click here to <a href="/FlexiMetrics/ConfirmDeleteUCTable?Id=@Table.ChangeRequestId">Delete Under Construction Table</a></p>
+}
+else
+{
+    <p>You currently do not have a table under construction. You can add one by <a href="/FlexiMetrics/AddUCTable">clicking here.</a></p>
+    
+
+}
+

@@ -1,0 +1,35 @@
+﻿@{
+    ViewData["Title"] = "ConfirmDeleteUCTable";
+}
+
+@model List<ChangeRequest>
+@{//ChangeTypeId = 1 Is Table Name, ChangeTypeId = 4 is Column
+    ChangeRequest Table = Model.Where(x => x.ChangeTypeId == 1).First();
+    int TableID = Table.ChangeRequestId;
+}
+
+<h4>Delete Table Under Construction</h4>
+
+<p>@Table.NewValue</p>
+
+<table class="table-bordered">
+    <tr>
+        @foreach (var column in Model)
+        {
+            @if (column.ChangeTypeId == 4)
+            {
+                <td>
+                    <p>@column.NewValue</p>
+                    <p>@column.ValueType</p>
+                </td>
+            }
+        }
+    </tr>
+</table>
+
+<p>Are you sure you want to delete the table <b>@Table.NewValue </b>that you have under construction? All columns and data types will be lost and gone forever.</p>
+<p></p>
+
+<a href="/FlexiMetrics/DeleteUCTable?Id=@Table.ChangeRequestId">Delete @Table.NewValue</a>
+<p></p>
+<a href="/FlexiMetrics/Index">Return to Index</a>

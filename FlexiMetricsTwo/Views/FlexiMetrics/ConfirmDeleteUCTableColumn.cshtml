@@ -1,0 +1,19 @@
+﻿@{
+    ViewData["Title"] = "ConfirmDeleteUCTableColumn";
+}
+
+@model List<ChangeRequest>
+
+@{
+    ChangeRequest ColumnToEdit = Model.Where(x => x.ParentId != null).First();
+    ChangeRequest Parent = Model.Where(x => x.ParentId == null).First();
+}
+
+<h4>Delete Column</h4>
+<p>Please confirm that you want to delete the column<b> @ColumnToEdit.NewValue </b>of data type<b> @ColumnToEdit.ValueType </b>from the under construction table <b> @Parent.NewValue:</b></p>
+
+<p><a href="/FlexiMetrics/DeleteUCTableColumn?Id=@ColumnToEdit.ChangeRequestId&TableId=@Parent.ChangeRequestId">Delete Column: @ColumnToEdit.NewValue</a></p>
+
+<p>Click here to return to <a href="/FlexiMetrics/ViewUCTableToEdit?Id=@Parent.ChangeRequestId">Table Edit</a> page</p>
+
+<p>Click here to return to <a href="/FlexiMetrics/Index"</p>

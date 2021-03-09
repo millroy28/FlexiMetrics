@@ -1,0 +1,19 @@
+﻿@{
+    ViewData["Title"] = "AddUCTable";
+}
+
+
+
+<h4>Add a table</h4>
+
+    <p>To begin making a new table, please enter a name for your table below:</p>
+    <form action="/FlexiMetrics/AddUCTable" method="post" class="form-control">
+        <input type="text" name="NewValue" placeholder="Table Name" />
+        <input type="hidden" name="ValueType" value="TableName" />
+        <input type="hidden" name="Author" value="" />
+        <input type="hidden" name="SchemiID" value="" />
+        <input type="hidden" name="ChangeTypeID" value="1" />
+        <input type="submit" value="Submit Table Name" />
+    </form>
+
+

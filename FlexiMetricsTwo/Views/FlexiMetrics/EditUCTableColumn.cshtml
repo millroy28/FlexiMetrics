@@ -1,0 +1,58 @@
+﻿@{
+    ViewData["Title"] = "EditUCTableColumn";
+}
+
+@model List<ChangeRequest>
+
+@{
+    ChangeRequest ColumnToEdit = Model.Where(x => x.ParentId != null).First();
+    ChangeRequest Parent = Model.Where(x => x.ParentId == null).First();
+}
+
+<h4>Edit Column</h4>
+<p>You are editing @ColumnToEdit.NewValue from under construction table @Parent.NewValue:</p>
+
+<table>
+    <tr>
+        <td>
+            <p>Column Name:</p>
+        </td>
+        <td>
+            <p>Data Type:</p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <p>@ColumnToEdit.NewValue</p>
+        </td>
+        <td>
+            <p>@ColumnToEdit.ValueType</p>
+        </td>
+    </tr>
+</table>
+
+<form action="/FlexiMetrics/EditUCTableColumn" method="post" class="col-form-label">
+    <input type="text" name="NewValue" value="@ColumnToEdit.NewValue" />
+    <input type="radio" name="ValueType" value="Integer" />Integer
+    <input type="radio" name="ValueType" value="Money" />Money
+    <input type="radio" name="ValueType" value="Decimal Value Numbers" />Decimal Value Numbers
+    <input type="radio" name="ValueType" value="Dates and Times" />Dates and Times
+    <input type="radio" name="ValueType" value="Binary Value" />Binary Value
+    <input type="radio" name="ValueType" value="Small string" />Small string (10 chars or less)
+    <input type="radio" name="ValueType" value="Medium string" />Medium string (50 chars or less)
+    <input type="radio" name="ValueType" value="Large string" />Large string (500 chars or less)
+    <input type="radio" name="ValueType" value="Maximum length" />Maximum length string
+    <input type="hidden" name="Author" value="" />
+    <input type="hidden" name="SchemiID" value="" />
+    <input type="hidden" name="ChangeTypeID" value="4" />
+    <input type="hidden" name="ChangeRequestId" value="@ColumnToEdit.ChangeRequestId" />
+    <input type="hidden" name="ParentId" value="@Parent.ChangeRequestId" />
+    <input type="submit" value="Submit New Column" />
+    </form>
+
+<p>Click here to return to <a href="/FlexiMetrics/ViewUCTableToEdit?Id=@Parent.ChangeRequestId">Table Edit</a> page</p>
+
+<p>Click here to return to <a href="/FlexiMetrics/Index"</p>
+
+
+

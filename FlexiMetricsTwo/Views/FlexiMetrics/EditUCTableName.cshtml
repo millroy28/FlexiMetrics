@@ -1,0 +1,21 @@
+﻿@{
+    ViewData["Title"] = "EditUCTableName";
+}
+
+@model ChangeRequest
+
+
+
+<h4>Edit Table Name </h4>
+
+<p>To change the name of table <b>@Model.NewValue</b> submit a new name below:</p>
+
+<form action="/FlexiMetrics/EditUCTableName" method="post" class="col-form-label">
+    <input type="text" name="NewValue" value="@Model.NewValue" />
+    <input type="hidden" name="ChangeRequestId" value="@Model.ChangeRequestId" />
+    <input type="submit" value="Submit New Table Name" />
+</form>
+
+<p>Click here to return to <a href="/FlexiMetrics/TablesUnderConstruction">Tables Under Construction</a> page</p>
+
+<p>Click here to return to <a href="/FlexiMetrics/Index"</p>

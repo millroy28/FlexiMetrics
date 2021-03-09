@@ -1,0 +1,30 @@
+﻿@{
+    ViewData["Title"] = "TablesUnderConstruction";
+}
+
+@model List<ChangeRequest>
+
+<h4>Tables Currently Under Construction:</h4>
+
+
+@if (@Model.Any())
+{
+    <table class="table-bordered">
+
+        @foreach (var row in Model)
+        {
+            <tr>
+                <td>@row.NewValue</td>
+                <td><a href="/FlexiMetrics/ViewUCTableToEdit?id=@row.ChangeRequestId">Edit Under Construction Table</a></td>
+                <td><a href="/FlexiMetrics/ConfirmDeleteUCTable?id=@row.ChangeRequestId">Delete Under Construction Table</a></td>
+            </tr>
+        }
+    </table>
+   
+}
+else
+{
+    <p>You currently do not have any tables under construction. Click here to <a href="/FlexiMetrics/AddUCTable">Create a New Table</a></p>
+
+}
+
