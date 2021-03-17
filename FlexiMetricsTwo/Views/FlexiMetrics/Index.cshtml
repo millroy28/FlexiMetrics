@@ -1,10 +1,38 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    ViewData["Title"] = "Index";
 }
 
-<p>This is a placeholder for contents. Things to like, add, or whatever:
+@model List<MasterSchema>
+
+<h2>Welcome, USER NAME WHEN IDENTITY IS A THING THAT IS ADDED BUT IT IS NOT ADDED YET</h2>
+<h4>Your database Summary:</h4>
+
+@if (Model != null)
+{
+  <table class="table-bordered">
+      <tr>
+          <td>
+              Table Name
+          </td>
+      </tr>
+    @foreach(var table in Model)
+    {
+      <tr>
+          <td>
+              @table.FacingName
+          </td>
+      </tr>
+    }
+  </table>
+}
+else
+{
+    <p>You currently do not have any tables in the database. You can begin constructing one by <a href="/FlexiMetrics/AddUCTable">clicking here.</a></p>
+}
+
+
+<p>
+    This is a placeholder for contents. Things to like, add, or whatever:
     <ul>
         <li>A page explaining how to do the things</li>
         <li>A link to a page to add a table</li>
@@ -17,16 +45,25 @@
         <li>Ugh, this is like, a lot of work. Why am I doing this?</li>
 
     </ul>
-    
-    
-    </p>
+
+
+</p>
 <p class="font-weight-bold">A column of links for testing the things:</p>
 <table class="table-active"
     <tr>
-        <a href="/FlexiMetrics/TablesUnderConstruction">View Tables Under Construction</a>
+        <p><a href="/FlexiMetrics/TablesUnderConstruction">View Tables Under Construction</a></p>
     </tr>
     <tr>
-        <a href="/FlexiMetrics/AddUCTable">Add an Under Construction Table</a>
+        <p><a href="/FlexiMetrics/AddUCTable">Add an Under Construction Table</a></p>
+    </tr>
+    <tr>
+
+    </tr>
+    <tr>
+        <p>!!!Careful<a href="/FlexiMetrics/TabulaRasa?Mode=0">Nuke User Tables</a>!!!</p>
+    </tr>
+    <tr>
+        <p>!!!Careful<a href="/FlexiMetrics/TabulaRasa?Mode=1">Nuke User Tables and all logs etc</a>!!!</p>
     </tr>
 </table>
 

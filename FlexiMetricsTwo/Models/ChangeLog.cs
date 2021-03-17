@@ -7,16 +7,14 @@ namespace FlexiMetricsTwo.Models
 {
     public partial class ChangeLog
     {
-        public int? Author { get; set; }
+        public int? UserId { get; set; }
         public int? SchemaId { get; set; }
         public int? ChangeTypeId { get; set; }
         public string OldValue { get; set; }
         public string NewValue { get; set; }
-        public int? OldStatusId { get; set; }
-        public int? NewStatusId { get; set; }
-        public DateTime? Date { get; set; }
+        public DateTime? TimeStamp { get; set; }
 
         public virtual ChangeType ChangeType { get; set; }
-        public virtual UserSchema Schema { get; set; }
+        public virtual MasterSchema Schema { get; set; }
     }
 }

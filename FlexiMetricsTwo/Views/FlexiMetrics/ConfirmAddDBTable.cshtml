@@ -1,0 +1,34 @@
+﻿@{
+    ViewData["Title"] = "AddDBTable";
+}
+
+@model List<ChangeRequest>
+@{//ChangeTypeId = 1 Is Table Name, ChangeTypeId = 4 is Column
+    ChangeRequest Table = Model.Where(x => x.ChangeTypeId == 1).First();
+    int TableID = Table.ChangeRequestId;
+}
+<h4>Add Table to the Database</h4>
+
+
+    <p>Confirm that you would like to add the following table to the Database:</p>
+    <p>@Table.NewValue</p>
+    <p></p>
+
+    <table class="table-bordered">
+        <tr>
+            @foreach (var column in Model)
+            { 
+                @if (column.ChangeTypeId == 4)
+                {
+                    <td>
+                        <p>@column.NewValue</p>
+                        <p>@column.ValueType</p>
+                    </td>
+                }
+            }
+        </tr>     
+    </table>
+
+    <p><a href="/FlexiMetrics/AddDBTable?Id=@TableID">Click here to add this table to the Database</a></p>
+
+

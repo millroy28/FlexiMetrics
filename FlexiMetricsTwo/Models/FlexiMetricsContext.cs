@@ -20,9 +20,11 @@ namespace FlexiMetricsTwo.Models
         public virtual DbSet<ChangeLog> ChangeLogs { get; set; }
         public virtual DbSet<ChangeRequest> ChangeRequests { get; set; }
         public virtual DbSet<ChangeType> ChangeTypes { get; set; }
-        public virtual DbSet<SchemaLog> SchemaLogs { get; set; }
-        public virtual DbSet<SchemaStatus> SchemaStatuses { get; set; }
-        public virtual DbSet<UserSchema> UserSchemas { get; set; }
+        public virtual DbSet<FrontToSqlterm> FrontToSqlterms { get; set; }
+        public virtual DbSet<MasterSchema> MasterSchemas { get; set; }
+        public virtual DbSet<PermissionLevel> PermissionLevels { get; set; }
+        public virtual DbSet<SqltermType> SqltermTypes { get; set; }
+        public virtual DbSet<Structure> Structures { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -45,17 +47,9 @@ namespace FlexiMetricsTwo.Models
 
                 entity.Property(e => e.ChangeTypeId).HasColumnName("ChangeTypeID");
 
-                entity.Property(e => e.Date)
-                    .HasColumnType("datetime")
-                    .HasColumnName("DATE");
-
-                entity.Property(e => e.NewStatusId).HasColumnName("NewStatusID");
-
                 entity.Property(e => e.NewValue)
                     .HasMaxLength(100)
                     .IsUnicode(false);
-
-                entity.Property(e => e.OldStatusId).HasColumnName("OldStatusID");
 
                 entity.Property(e => e.OldValue)
                     .HasMaxLength(100)
@@ -63,15 +57,19 @@ namespace FlexiMetricsTwo.Models
 
                 entity.Property(e => e.SchemaId).HasColumnName("SchemaID");
 
+                entity.Property(e => e.TimeStamp).HasColumnType("datetime");
+
+                entity.Property(e => e.UserId).HasColumnName("UserID");
+
                 entity.HasOne(d => d.ChangeType)
                     .WithMany()
                     .HasForeignKey(d => d.ChangeTypeId)
-                    .HasConstraintName("FK__ChangeLog__Chang__7A672E12");
+                    .HasConstraintName("FK__ChangeLog__Chang__41EDCAC5");
 
                 entity.HasOne(d => d.Schema)
                     .WithMany()
                     .HasForeignKey(d => d.SchemaId)
-                    .HasConstraintName("FK__ChangeLog__Schem__797309D9");
+                    .HasConstraintName("FK__ChangeLog__Schem__40F9A68C");
             });
 
             modelBuilder.Entity<ChangeRequest>(entity =>
@@ -90,6 +88,8 @@ namespace FlexiMetricsTwo.Models
 
                 entity.Property(e => e.SchemaId).HasColumnName("SchemaID");
 
+                entity.Property(e => e.UserId).HasColumnName("UserID");
+
                 entity.Property(e => e.ValueType)
                     .HasMaxLength(100)
                     .IsUnicode(false);
@@ -97,12 +97,12 @@ namespace FlexiMetricsTwo.Models
                 entity.HasOne(d => d.ChangeType)
                     .WithMany(p => p.ChangeRequests)
                     .HasForeignKey(d => d.ChangeTypeId)
-                    .HasConstraintName("FK__ChangeReq__Chang__778AC167");
+                    .HasConstraintName("FK__ChangeReq__Chang__45BE5BA9");
 
                 entity.HasOne(d => d.Schema)
                     .WithMany(p => p.ChangeRequests)
                     .HasForeignKey(d => d.SchemaId)
-                    .HasConstraintName("FK__ChangeReq__Schem__76969D2E");
+                    .HasConstraintName("FK__ChangeReq__Schem__44CA3770");
             });
 
             modelBuilder.Entity<ChangeType>(entity =>
@@ -116,56 +116,86 @@ namespace FlexiMetricsTwo.Models
                     .IsUnicode(false);
             });
 
-            modelBuilder.Entity<SchemaLog>(entity =>
+            modelBuilder.Entity<FrontToSqlterm>(entity =>
             {
-                entity.ToTable("SchemaLog");
+                entity.HasNoKey();
 
-                entity.Property(e => e.SchemaLogId).HasColumnName("SchemaLogID");
+                entity.ToTable("FrontToSQLTerms");
 
-                entity.Property(e => e.Date).HasColumnType("datetime");
-
-                entity.Property(e => e.SchemaId).HasColumnName("SchemaID");
-
-                entity.Property(e => e.SchemaStatusId).HasColumnName("SchemaStatusID");
-
-                entity.HasOne(d => d.Schema)
-                    .WithMany(p => p.SchemaLogs)
-                    .HasForeignKey(d => d.SchemaId)
-                    .HasConstraintName("FK__SchemaLog__Schem__3E52440B");
-
-                entity.HasOne(d => d.SchemaStatus)
-                    .WithMany(p => p.SchemaLogs)
-                    .HasForeignKey(d => d.SchemaStatusId)
-                    .HasConstraintName("FK__SchemaLog__Schem__3F466844");
-            });
-
-            modelBuilder.Entity<SchemaStatus>(entity =>
-            {
-                entity.ToTable("SchemaStatus");
-
-                entity.Property(e => e.SchemaStatusId).HasColumnName("SchemaStatusID");
-
-                entity.Property(e => e.StatusName)
-                    .HasMaxLength(20)
+                entity.Property(e => e.FrontFacingTerm)
+                    .HasMaxLength(30)
                     .IsUnicode(false);
+
+                entity.Property(e => e.SqlTermTypeId).HasColumnName("SqlTermTypeID");
+
+                entity.Property(e => e.Sqlterm)
+                    .HasMaxLength(20)
+                    .IsUnicode(false)
+                    .HasColumnName("SQLTerm");
+
+                entity.HasOne(d => d.SqlTermType)
+                    .WithMany()
+                    .HasForeignKey(d => d.SqlTermTypeId)
+                    .HasConstraintName("FK__FrontToSQ__SqlTe__18EBB532");
             });
 
-            modelBuilder.Entity<UserSchema>(entity =>
+            modelBuilder.Entity<MasterSchema>(entity =>
             {
                 entity.HasKey(e => e.SchemaId)
-                    .HasName("PK__UserSche__95006FDA81676915");
+                    .HasName("PK__MasterSc__95006FDAD9210879");
 
-                entity.ToTable("UserSchema");
+                entity.ToTable("MasterSchema");
 
                 entity.Property(e => e.SchemaId).HasColumnName("SchemaID");
 
-                entity.Property(e => e.ColumnName)
+                entity.Property(e => e.FacingName)
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
-                entity.Property(e => e.ColumnType)
+                entity.Property(e => e.FacingType)
                     .HasMaxLength(100)
                     .IsUnicode(false);
+
+                entity.Property(e => e.ParentSchemaId).HasColumnName("ParentSchemaID");
+
+                entity.Property(e => e.Sqlname)
+                    .HasMaxLength(100)
+                    .IsUnicode(false)
+                    .HasColumnName("SQLName");
+
+                entity.Property(e => e.Sqltype)
+                    .HasMaxLength(100)
+                    .IsUnicode(false)
+                    .HasColumnName("SQLType");
+            });
+
+            modelBuilder.Entity<PermissionLevel>(entity =>
+            {
+                entity.Property(e => e.PermissionLevelId).HasColumnName("PermissionLevelID");
+
+                entity.Property(e => e.PermissionLevel1)
+                    .HasMaxLength(20)
+                    .IsUnicode(false)
+                    .HasColumnName("PermissionLevel");
+            });
+
+            modelBuilder.Entity<SqltermType>(entity =>
+            {
+                entity.ToTable("SQLTermTypes");
+
+                entity.Property(e => e.SqltermTypeId).HasColumnName("SQLTermTypeID");
+
+                entity.Property(e => e.SqltermType1)
+                    .HasMaxLength(20)
+                    .IsUnicode(false)
+                    .HasColumnName("SQLTermType");
+            });
+
+            modelBuilder.Entity<Structure>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("Structure");
 
                 entity.Property(e => e.TableName)
                     .HasMaxLength(100)

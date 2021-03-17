@@ -4,6 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+
 
 /*
 Scaffold-DbContext "Server=.\SQLExpress;Database=FlexiMetrics;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -Force
@@ -23,7 +26,9 @@ namespace FlexiMetricsTwo.Controllers
         }
         public IActionResult Index()
         {
-            return View();
+            List<MasterSchema> TableSummary = _context.MasterSchemas.Where(x => x.FacingType == "TableName" 
+                                                                             && x.Active == true).ToList();
+            return View(TableSummary);
         }
         public IActionResult TablesUnderConstruction()
         {
@@ -79,7 +84,8 @@ namespace FlexiMetricsTwo.Controllers
         }
         public IActionResult ViewUCTableToEdit(int Id)
         {
-            List<ChangeRequest> TableToEdit = _context.ChangeRequests.Where(x => x.ChangeRequestId == Id || x.ParentId == Id).ToList();
+            List<ChangeRequest> TableToEdit = _context.ChangeRequests.Where(x => x.ChangeRequestId == Id 
+                                                                              || x.ParentId == Id).ToList();
             return View(TableToEdit);
         }
         [HttpGet]
@@ -136,18 +142,42 @@ namespace FlexiMetricsTwo.Controllers
         }
         public IActionResult ConfirmDeleteUCTable(int Id)
         {
-            List<ChangeRequest> TableToDelete = _context.ChangeRequests.Where(x => x.ChangeRequestId == Id || x.ParentId == Id).ToList();
+            List<ChangeRequest> TableToDelete = _context.ChangeRequests.Where(x => x.ChangeRequestId == Id 
+                                                                                || x.ParentId == Id).ToList();
             return View(TableToDelete);
         }
         public IActionResult DeleteUCTable(int Id)
         {
             //ChangeRequests related to tables have ChangeIDs 1 (Add Table) and 4 (Add Column)
-            List<ChangeRequest> UnderConstruction = _context.ChangeRequests.Where(x => x.ChangeRequestId == Id || x.ParentId == Id).ToList();
+            List<ChangeRequest> UnderConstruction = _context.ChangeRequests.Where(x => x.ChangeRequestId == Id 
+                                                                                    || x.ParentId == Id).ToList();
             foreach (var item in UnderConstruction)
             {
                 _context.ChangeRequests.Remove(item);
             }
             _context.SaveChanges();
+            return RedirectToAction("Index");
+        }
+ 
+        public IActionResult ConfirmAddDBTable(int Id)
+        {
+            List<ChangeRequest> TableToAdd = _context.ChangeRequests.Where(x => x.ChangeRequestId == Id 
+                                                                             || x.ParentId == Id).ToList();
+            return View(TableToAdd);
+        }
+        public IActionResult AddDBTable (int Id)
+        {
+            FormattableString sql = $"EXEC ApplyChangeRequests @ChangeRequestID ={Id}";
+            _context.Database.ExecuteSqlInterpolated(sql);
+
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult TabulaRasa(int Mode)
+        {
+            FormattableString sql = $"EXEC TabulaRasa @Mode ={Mode}";
+            _context.Database.ExecuteSqlInterpolated(sql);
+
             return RedirectToAction("Index");
         }
 

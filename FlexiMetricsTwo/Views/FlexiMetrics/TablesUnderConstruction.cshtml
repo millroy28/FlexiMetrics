@@ -13,11 +13,12 @@
 
         @foreach (var row in Model)
         {
-            <tr>
-                <td>@row.NewValue</td>
-                <td><a href="/FlexiMetrics/ViewUCTableToEdit?id=@row.ChangeRequestId">Edit Under Construction Table</a></td>
-                <td><a href="/FlexiMetrics/ConfirmDeleteUCTable?id=@row.ChangeRequestId">Delete Under Construction Table</a></td>
-            </tr>
+        <tr>
+            <td>@row.NewValue</td>
+            <td><a href="/FlexiMetrics/ViewUCTableToEdit?id=@row.ChangeRequestId">Edit Under Construction Table</a></td>
+            <td><a href="/FlexiMetrics/ConfirmAddDBTable?id=@row.ChangeRequestId">Add Table To Database</a></td>
+            <td><a href="/FlexiMetrics/ConfirmDeleteUCTable?id=@row.ChangeRequestId">Delete Under Construction Table</a></td>
+        </tr>
         }
     </table>
    
